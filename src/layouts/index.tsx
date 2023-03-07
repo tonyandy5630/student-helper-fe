@@ -1,5 +1,5 @@
 import React from "react";
-import Header from "@layouts/header";
+import Header from "./header";
 
 export default function GeneralLayout() {
   return (
