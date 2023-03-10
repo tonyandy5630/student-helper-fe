@@ -1,5 +1,5 @@
-import React from "react";
+import React from 'react'
 
 export default function Custom404() {
-  return <div>Custom404</div>;
+  return <div>Custom404</div>
 }
