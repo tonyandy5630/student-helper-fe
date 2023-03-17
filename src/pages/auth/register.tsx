@@ -4,8 +4,12 @@ import logo from "assets/images/logo.png"
 import FormInput from "components/utils/auth/LoginForm/Input"
 import GoogleButton from "react-google-button"
 import { useForm } from "react-hook-form"
-import getRules from "../../utils/auth/rules"
+import getRules from "../../utils/rules/auth"
 import loginPhoto from "../../assets/images/login-2.jpg"
+import { UserSchema, UserSchemaType } from "utils/schema/auth"
+import { yupResolver } from "@hookform/resolvers/yup"
+
+type FormData = UserSchemaType
 
 export default function SignUp() {
   const {
@@ -14,13 +18,8 @@ export default function SignUp() {
     getValues,
     formState: { errors },
     register
-  } = useForm({
-    defaultValues: {
-      email: "",
-      pwd: "",
-      rePwd: "",
-      username: ""
-    }
+  } = useForm<FormData>({
+    resolver: yupResolver(UserSchema)
   })
 
   const rules = getRules(getValues)
@@ -74,7 +73,6 @@ export default function SignUp() {
                 placeholder='Example: abc@def.com'
                 isRequired={true}
                 register={register}
-                registerOptions={rules.email}
                 helperText={errors.email?.message}
                 helperTextIsError={errors.email !== undefined}
               />
@@ -87,7 +85,6 @@ export default function SignUp() {
                 placeholder='David504'
                 isRequired={true}
                 register={register}
-                registerOptions={rules.username}
                 helperText={errors.username?.message}
                 helperTextIsError={errors.username !== undefined}
               />
@@ -100,7 +97,6 @@ export default function SignUp() {
                 label='Password'
                 isRequired={true}
                 register={register}
-                registerOptions={rules.pwd}
                 helperText={errors.pwd?.message}
                 helperTextIsError={errors.pwd !== undefined}
               />
@@ -113,7 +109,6 @@ export default function SignUp() {
                 label='Confirm Password'
                 isRequired={true}
                 register={register}
-                registerOptions={rules.rePwd}
                 helperText={errors.rePwd?.message}
                 helperTextIsError={errors.rePwd !== undefined}
               />
