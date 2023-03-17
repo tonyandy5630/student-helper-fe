@@ -1,4 +1,5 @@
 /** @type {import('tailwindcss').Config} */
+const plugin = require("tailwindcss/plugin")
 module.exports = {
   corePlugins: {
     preflight: false
@@ -14,10 +15,37 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        "leaf-green": "#a8fd85"
+        "leaf-green": "#a8fd85",
+        black: "#322F1Dff",
+        "sea-leaf": "#0E8388",
+        "bright-teal": "#CBE4DE",
+        "light-gray": "#D0CFD0ff",
+        "fade-gray": "#C1C5C8ff"
+      },
+      width: {
+        inherit: "inherit"
+      },
+      screens: {
+        xs: "320px"
       }
     }
   },
-  plugins: [],
+  plugins: [
+    plugin(function ({ addComponents }) {
+      addComponents({
+        ".blur-bg": {
+          position: "absolute",
+          top: "0",
+          bottom: "0",
+          left: 0,
+          right: 0,
+          backdropFilter: "blur(24px)"
+        },
+        ".mobile-gray": {
+          backgroundColor: "#888484a1"
+        }
+      })
+    })
+  ],
   important: "#__next"
 }
