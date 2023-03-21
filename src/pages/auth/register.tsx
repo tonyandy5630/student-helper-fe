@@ -1,13 +1,22 @@
-import React from "react"
-import { Button, Grid, Stack, Container, Typography, Divider } from "@mui/material"
+import React, { useRef, useState } from "react"
+import { Grid, Stack, Container, Typography, Divider, NoSsr } from "@mui/material"
+import { LoadingButton } from "@mui/lab"
 import logo from "assets/images/logo.png"
 import FormInput from "components/utils/auth/LoginForm/Input"
 import GoogleButton from "react-google-button"
-import { useForm } from "react-hook-form"
-import getRules from "../../utils/rules/auth"
+import { useForm, Controller } from "react-hook-form"
 import loginPhoto from "../../assets/images/login-2.jpg"
 import { UserSchema, UserSchemaType } from "utils/schema/auth"
 import { yupResolver } from "@hookform/resolvers/yup"
+import { useMutation } from "@tanstack/react-query"
+import { registerAccountAPI } from "apis/auth.api"
+import { omit } from "lodash"
+import { isAxiosUnprocessableEntityError } from "utils/utils"
+import { ResponseAPI } from "types/utils.type"
+import MyCustomModal from "components/utils/auth/LoginForm/Modal"
+import Link from "next/link"
+import Recaptcha from "react-google-recaptcha"
+import { verifyCaptchaAPI } from "apis/verifyCaptcha.api"
 
 type FormData = UserSchemaType
 
@@ -15,130 +24,233 @@ export default function SignUp() {
   const {
     handleSubmit,
     control,
-    getValues,
-    formState: { errors },
-    register
+    formState: { errors, isValid },
+    setError,
+    register,
+    reset
   } = useForm<FormData>({
     resolver: yupResolver(UserSchema)
   })
 
-  const rules = getRules(getValues)
+  const [visibleCheckMail, setVisibleCheckMail] = useState<boolean>(false)
+  const [email, setEmail] = useState<string>("")
+  const [isCaptchaVerified, setIsCaptchaVerified] = useState<boolean>(false)
+  const captchaRef = useRef<Recaptcha>(null)
+  const [siteKey] = useState<string>(process.env.NEXT_PUBLIC_SITE_KEY || "")
+  function handleHideModal() {
+    setVisibleCheckMail(false)
+  }
+  //* form validate with no error and captcha is verified
+  const isNotValidateForm = errors && !isCaptchaVerified
+
+  function handleCaptchaChange(value: any) {
+    verifyCaptchaMutation.mutate(value, {
+      onSuccess: (data) => {
+        const isVerified = data.data.data?.captcha_verified || false
+        setIsCaptchaVerified(isVerified)
+      },
+      onError: (err) => {
+        console.log(err)
+      }
+    })
+  }
+
+  const verifyCaptchaMutation = useMutation({
+    mutationFn: (captcha: string) => verifyCaptchaAPI(captcha)
+  })
+
+  const registerAccountMutation = useMutation({
+    mutationFn: (body: Omit<FormData, "rePwd">) => registerAccountAPI(body)
+  })
+  const { isLoading: isRegistering } = registerAccountMutation
 
   const handleGoogleSignUp = () => {
     window.open(`http://localhost:8080/auth/google/callback`, "_self")
   }
 
   const handleSubmitRegister = handleSubmit((data) => {
-    console.log(data)
+    const body = omit(data, ["rePwd"])
+    registerAccountMutation.mutate(body, {
+      onSuccess: (data) => {
+        const email = data.data.data?.email
+
+        if (email) {
+          setEmail(email)
+        }
+        setVisibleCheckMail(true)
+        reset((formValues) => {
+          captchaRef.current?.reset()
+          return { ...formValues, email: "", pwd: "", rePwd: "", username: "" }
+        })
+      },
+      onError: (err) => {
+        if (isAxiosUnprocessableEntityError<ResponseAPI<Omit<FormData, "rePwd">>>(err)) {
+          const formError = err.response?.data.data
+
+          if (formError?.email) {
+            setError("email", {
+              message: formError.email,
+              type: "Server"
+            })
+          }
+
+          if (formError?.username) {
+            setError("username", {
+              message: formError.username,
+              type: "Server"
+            })
+          }
+
+          if (formError?.pwd) {
+            setError("pwd", {
+              message: formError.pwd,
+              type: "Server"
+            })
+          }
+        }
+      }
+    })
   })
 
+  console.log(isValid)
+
   return (
-    <Stack
-      component={Container}
-      alignItems='center'
-      justifyContent='center'
-      className='h-screen max-w-full bg-gradient-to-br  from-fade-gray to-light-gray '
-    >
-      <Grid
-        container
-        direction='row'
-        spacing={0}
+    <>
+      <NoSsr>
+        <MyCustomModal visible={visibleCheckMail} setVisible={handleHideModal} email={email} />
+      </NoSsr>
+      <Stack
+        component={Container}
         alignItems='center'
-        justifyContent='space-around'
-        className='h-[90%] mobile-gray pl-0 w-full lg:w-8/12 lg:bg-black rounded-xl'
+        justifyContent='center'
+        className='h-screen max-w-full bg-gradient-to-br  from-fade-gray to-light-gray '
       >
-        <Grid item md={6} sm={6} direction='row' className='h-5/6 w-full flex md:w-2/3' alignItems='center'>
-          <Stack alignItems='center' justifyContent='space-around' className='h-full w-full'>
-            <form className=' w-[70%] flex flex-col' onSubmit={handleSubmitRegister}>
-              <div className='mx-auto h-40 '>
-                <img src={logo.src} className='h-48' />
-              </div>
-              <Typography
-                variant='h5'
-                gutterBottom
-                className='w-full text-bright-teal'
-                textTransform='uppercase'
-                fontWeight='bold'
-                noWrap={false}
-                textAlign='center'
-              >
-                Create account
+        <Grid
+          container
+          direction='row'
+          spacing={0}
+          alignItems='center'
+          justifyContent='space-around'
+          className='h-fit mobile-gray pl-0 w-full lg:w-8/12 lg:bg-black rounded-xl'
+        >
+          <Grid item md={6} sm={6} className='h-5/6 w-full flex md:w-2/3' alignItems='center'>
+            <Stack alignItems='center' justifyContent='space-around' className='h-full w-full'>
+              <form className=' w-[70%] flex flex-col ' onSubmit={handleSubmitRegister}>
+                <div className='mx-auto h-32 flex justify-center items-center'>
+                  <img src={logo.src} className='h-48' />
+                </div>
+                <Typography
+                  variant='h5'
+                  gutterBottom
+                  className='w-full text-bright-teal'
+                  textTransform='uppercase'
+                  fontWeight='bold'
+                  noWrap={false}
+                  textAlign='center'
+                >
+                  Create account
+                </Typography>
+                <FormInput
+                  control={control}
+                  name='email'
+                  id='email'
+                  autocomplete='on'
+                  label='Your email address'
+                  placeholder='Example: abc@def.com'
+                  isRequired={true}
+                  register={register}
+                  helperText={errors.email?.message}
+                  helperTextIsError={errors.email !== undefined}
+                />
+                <FormInput
+                  control={control}
+                  name='username'
+                  id='username'
+                  autocomplete='on'
+                  label='Username'
+                  placeholder='David504'
+                  isRequired={true}
+                  register={register}
+                  helperText={errors.username?.message}
+                  helperTextIsError={errors.username !== undefined}
+                />
+                <FormInput
+                  control={control}
+                  inputType='password'
+                  name='pwd'
+                  id='pwd'
+                  autocomplete='on'
+                  label='Password'
+                  isRequired={true}
+                  register={register}
+                  helperText={errors.pwd?.message}
+                  helperTextIsError={errors.pwd !== undefined}
+                />
+                <FormInput
+                  control={control}
+                  inputType='password'
+                  name='rePwd'
+                  id='rePwd'
+                  autocomplete='on'
+                  label='Confirm Password'
+                  isRequired={true}
+                  register={register}
+                  helperText={errors.rePwd?.message}
+                  helperTextIsError={errors.rePwd !== undefined}
+                />
+                <Recaptcha sitekey={siteKey} onChange={handleCaptchaChange} ref={captchaRef} />
+                <div id='captcha'></div>
+                <LoadingButton
+                  variant='outlined'
+                  // loading={isRegistering}
+                  loading={isRegistering}
+                  type='submit'
+                  className={`rounded-3xl text-black h-8 my-2.5 ${
+                    isNotValidateForm ? "bg-zinc-400 text-gray-500 border-transparent" : "bg-leaf-green  border-white"
+                  } ${isRegistering ? "h-8" : ""}`}
+                  loadingIndicator='Working on it...'
+                  disabled={isNotValidateForm}
+                >
+                  {isRegistering ? <></> : "Continue"}
+                </LoadingButton>
+              </form>
+              <Typography variant='caption' className='text-slate-300'>
+                Already has an account ?{" "}
+                <Link href='/auth/signin' className='text-leaf-green'>
+                  Sign in
+                </Link>
               </Typography>
-              <FormInput
-                control={control}
-                name='email'
-                id='email'
-                autocomplete='on'
-                label='Your email address'
-                placeholder='Example: abc@def.com'
-                isRequired={true}
-                register={register}
-                helperText={errors.email?.message}
-                helperTextIsError={errors.email !== undefined}
-              />
-              <FormInput
-                control={control}
-                name='username'
-                id='username'
-                autocomplete='on'
-                label='Username'
-                placeholder='David504'
-                isRequired={true}
-                register={register}
-                helperText={errors.username?.message}
-                helperTextIsError={errors.username !== undefined}
-              />
-              <FormInput
-                control={control}
-                inputType='password'
-                name='pwd'
-                id='pwd'
-                autocomplete='on'
-                label='Password'
-                isRequired={true}
-                register={register}
-                helperText={errors.pwd?.message}
-                helperTextIsError={errors.pwd !== undefined}
-              />
-              <FormInput
-                control={control}
-                inputType='password'
-                name='rePwd'
-                id='rePwd'
-                autocomplete='on'
-                label='Confirm Password'
-                isRequired={true}
-                register={register}
-                helperText={errors.rePwd?.message}
-                helperTextIsError={errors.rePwd !== undefined}
-              />
               <Divider
-                className='text-stone-300'
-                light={true}
+                className='text-stone-300 justify-center'
+                light
+                role='presentation'
+                flexItem
+                variant='middle'
                 sx={{
                   "&.MuiDivider-root:after, &.MuiDivider-root:before": {
+                    borderTop: "thin solid rgba(255 255 255)",
                     top: "13%",
-                    borderTop: "thin solid rgb(255 255 255);"
+                    width: "27%"
                   }
                 }}
               >
                 or
               </Divider>
-              <Button
-                variant='outlined'
-                type='submit'
-                className='rounded-3xl bg-leaf-green text-black border-white h-13 my-2.5 '
-              >
-                Continue
-              </Button>
-            </form>
-            <GoogleButton onClick={handleGoogleSignUp} className='my-3' />
-          </Stack>
+              <GoogleButton onClick={handleGoogleSignUp} className='my-3' />
+            </Stack>
+          </Grid>
+          <Grid
+            item
+            lg={6}
+            sm={6}
+            alignItems='center'
+            justifyContent='flex-end'
+            className='hidden lg:flex w-full h-full'
+          >
+            <img src={loginPhoto.src} width='450' height='710' className='h-full rounded-r-xl' />
+          </Grid>
         </Grid>
-        <Grid item lg={6} sm={6} alignItems='center' justifyContent='flex-end' className='hidden lg:flex w-full h-full'>
-          <img src={loginPhoto.src} width='450' height='710' className='h-full rounded-r-xl' />
-        </Grid>
-      </Grid>
-    </Stack>
+      </Stack>
+    </>
   )
 }

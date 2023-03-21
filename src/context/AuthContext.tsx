@@ -1,6 +1,7 @@
-import React, { createContext, useState } from 'react'
+import React, { createContext, useState } from "react"
 
-import type { User, IAuthContext } from '../types/Auth'
+import type { IAuthContext } from "../types/auth.type"
+import type { User } from "types/user.type"
 
 type AuthProviderProps = {
   children: React.ReactNode
@@ -8,9 +9,14 @@ type AuthProviderProps = {
 
 const defaultState = {
   user: {
-    username: '',
-    email: '',
-    fullname: ''
+    _id: "",
+    email: "",
+    followers: 0,
+    isActive: true,
+    isBanned: false,
+    rankInSubjects: [{}],
+    role: "user",
+    username: ""
   },
   setUser: (user: User) => {}
 } as IAuthContext
@@ -18,11 +24,7 @@ const defaultState = {
 export const AuthContext = createContext(defaultState)
 
 export function AuthContextProvider({ children }: AuthProviderProps) {
-  const [user, setUser] = useState<User>({
-    username: '',
-    email: '',
-    fullname: ''
-  })
+  const [user, setUser] = useState<User>(defaultState.user)
 
   return <AuthContext.Provider value={{ user, setUser }}>{children}</AuthContext.Provider>
 }

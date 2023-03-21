@@ -1,16 +1,19 @@
 import React from "react"
 import { Html, Head, Main, NextScript } from "next/document"
 import GlobalCssPriority from "components/utils/globalscssprop"
+import { ToastContainer } from "react-toastify"
 export default function Document() {
   return (
     <Html lang='en'>
       <Head />
-      <body>
-        <GlobalCssPriority>
+      <GlobalCssPriority>
+        <body>
           <Main />
           <NextScript />
-        </GlobalCssPriority>
-      </body>
+          <div id='portal'></div>
+          <ToastContainer />
+        </body>
+      </GlobalCssPriority>
     </Html>
   )
 }
