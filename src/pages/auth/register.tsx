@@ -1,10 +1,9 @@
 import React, { useRef, useState } from "react"
 import { Grid, Stack, Container, Typography, Divider, NoSsr } from "@mui/material"
 import { LoadingButton } from "@mui/lab"
-import logo from "assets/images/logo.png"
+import Logo from "components/logo"
 import FormInput from "components/utils/auth/LoginForm/Input"
-import GoogleButton from "react-google-button"
-import { useForm, Controller } from "react-hook-form"
+import { useForm } from "react-hook-form"
 import loginPhoto from "../../assets/images/login-2.jpg"
 import { UserSchema, UserSchemaType } from "utils/schema/auth"
 import { yupResolver } from "@hookform/resolvers/yup"
@@ -17,6 +16,7 @@ import MyCustomModal from "components/utils/auth/LoginForm/Modal"
 import Link from "next/link"
 import Recaptcha from "react-google-recaptcha"
 import { verifyCaptchaAPI } from "apis/verifyCaptcha.api"
+import MyGoogleButton from "components/utils/GoogleButton"
 
 type FormData = UserSchemaType
 
@@ -24,7 +24,7 @@ export default function SignUp() {
   const {
     handleSubmit,
     control,
-    formState: { errors, isValid },
+    formState: { errors },
     setError,
     register,
     reset
@@ -63,10 +63,6 @@ export default function SignUp() {
     mutationFn: (body: Omit<FormData, "rePwd">) => registerAccountAPI(body)
   })
   const { isLoading: isRegistering } = registerAccountMutation
-
-  const handleGoogleSignUp = () => {
-    window.open(`http://localhost:8080/auth/google/callback`, "_self")
-  }
 
   const handleSubmitRegister = handleSubmit((data) => {
     const body = omit(data, ["rePwd"])
@@ -112,8 +108,6 @@ export default function SignUp() {
     })
   })
 
-  console.log(isValid)
-
   return (
     <>
       <NoSsr>
@@ -123,7 +117,7 @@ export default function SignUp() {
         component={Container}
         alignItems='center'
         justifyContent='center'
-        className='h-screen max-w-full bg-gradient-to-br  from-fade-gray to-light-gray '
+        className='h-screen max-w-full bg-gradient-to-br from-fade-gray to-light-gray '
       >
         <Grid
           container
@@ -136,9 +130,7 @@ export default function SignUp() {
           <Grid item md={6} sm={6} className='h-5/6 w-full flex md:w-2/3' alignItems='center'>
             <Stack alignItems='center' justifyContent='space-around' className='h-full w-full'>
               <form className=' w-[70%] flex flex-col ' onSubmit={handleSubmitRegister}>
-                <div className='mx-auto h-32 flex justify-center items-center'>
-                  <img src={logo.src} className='h-48' />
-                </div>
+                <Logo />
                 <Typography
                   variant='h5'
                   gutterBottom
@@ -202,7 +194,6 @@ export default function SignUp() {
                 <div id='captcha'></div>
                 <LoadingButton
                   variant='outlined'
-                  // loading={isRegistering}
                   loading={isRegistering}
                   type='submit'
                   className={`rounded-3xl text-black h-8 my-2.5 ${
@@ -215,7 +206,7 @@ export default function SignUp() {
                 </LoadingButton>
               </form>
               <Typography variant='caption' className='text-slate-300'>
-                Already has an account ?{" "}
+                Already has an account ?
                 <Link href='/auth/signin' className='text-leaf-green'>
                   Sign in
                 </Link>
@@ -236,7 +227,7 @@ export default function SignUp() {
               >
                 or
               </Divider>
-              <GoogleButton onClick={handleGoogleSignUp} className='my-3' />
+              <MyGoogleButton />
             </Stack>
           </Grid>
           <Grid

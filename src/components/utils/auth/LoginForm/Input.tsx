@@ -28,6 +28,8 @@ type IFormInputProps = {
   inputProps?: object
   register: UseFormRegister<any>
   registerOptions?: object
+  className?: string
+  sx?: object
 }
 
 export default function AuthFormInput({
@@ -42,7 +44,9 @@ export default function AuthFormInput({
   isRequired = false,
   inputProps,
   register,
-  registerOptions
+  registerOptions,
+  className,
+  sx
 }: IFormInputProps) {
   const [showPwd, setShowPwd] = useState<Boolean>(false)
   const [isError, setIsError] = useState<boolean | undefined>(helperTextIsError)
@@ -63,14 +67,15 @@ export default function AuthFormInput({
         {label}
       </InputLabel>
       <OutlinedInput
-        className='bg-white p-2 h-9 rounded-3xl'
+        className={`bg-white p-2 h-9 rounded-3xl ${className}`}
         id={id}
         {...register(name, registerOptions)}
         autoComplete={autocomplete}
         error={isError}
         inputProps={inputProps}
         sx={{
-          fontSize: 14
+          fontSize: 14,
+          ...sx
         }}
         placeholder={placeholder}
         type={inputType === "password" && showPwd ? "" : inputType}
