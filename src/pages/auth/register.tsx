@@ -1,7 +1,7 @@
 import React, { useRef, useState } from "react"
 import { Grid, Stack, Container, Typography, Divider, NoSsr } from "@mui/material"
 import { LoadingButton } from "@mui/lab"
-import Logo from "components/logo"
+import Logo from "components/Logo"
 import FormInput from "components/utils/auth/LoginForm/Input"
 import { useForm } from "react-hook-form"
 import loginPhoto from "../../assets/images/login-2.jpg"
@@ -37,9 +37,11 @@ export default function SignUp() {
   const [isCaptchaVerified, setIsCaptchaVerified] = useState<boolean>(false)
   const captchaRef = useRef<Recaptcha>(null)
   const [siteKey] = useState<string>(process.env.NEXT_PUBLIC_SITE_KEY || "")
+
   function handleHideModal() {
     setVisibleCheckMail(false)
   }
+
   //* form validate with no error and captcha is verified
   const isNotValidateForm = errors && !isCaptchaVerified
 
@@ -125,10 +127,10 @@ export default function SignUp() {
           spacing={0}
           alignItems='center'
           justifyContent='space-around'
-          className='h-fit mobile-gray pl-0 w-full lg:w-8/12 lg:bg-black rounded-xl'
+          className='w-full pl-0 h-fit mobile-gray lg:w-8/12 lg:bg-dirt rounded-xl'
         >
-          <Grid item md={6} sm={6} className='h-5/6 w-full flex md:w-2/3' alignItems='center'>
-            <Stack alignItems='center' justifyContent='space-around' className='h-full w-full'>
+          <Grid item md={6} sm={6} className='flex w-full h-5/6 md:w-2/3' alignItems='center'>
+            <Stack alignItems='center' justifyContent='space-around' className='w-full h-full'>
               <form className=' w-[70%] flex flex-col ' onSubmit={handleSubmitRegister}>
                 <Logo />
                 <Typography
@@ -191,7 +193,6 @@ export default function SignUp() {
                   helperTextIsError={errors.rePwd !== undefined}
                 />
                 <Recaptcha sitekey={siteKey} onChange={handleCaptchaChange} ref={captchaRef} />
-                <div id='captcha'></div>
                 <LoadingButton
                   variant='outlined'
                   loading={isRegistering}
@@ -212,7 +213,7 @@ export default function SignUp() {
                 </Link>
               </Typography>
               <Divider
-                className='text-stone-300 justify-center'
+                className='justify-center text-stone-300'
                 light
                 role='presentation'
                 flexItem
@@ -236,7 +237,7 @@ export default function SignUp() {
             sm={6}
             alignItems='center'
             justifyContent='flex-end'
-            className='hidden lg:flex w-full h-full'
+            className='hidden w-full h-full lg:flex'
           >
             <img src={loginPhoto.src} width='450' height='710' className='h-full rounded-r-xl' />
           </Grid>

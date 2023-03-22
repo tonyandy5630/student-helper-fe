@@ -67,7 +67,7 @@ export default function AuthFormInput({
         {label}
       </InputLabel>
       <OutlinedInput
-        className={`bg-white p-2 h-9 rounded-3xl ${className}`}
+        className={`bg-white p-2 h-9 rounded-3xl  ${className}`}
         id={id}
         {...register(name, registerOptions)}
         autoComplete={autocomplete}

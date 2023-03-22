@@ -16,7 +16,7 @@ module.exports = {
     extend: {
       colors: {
         "leaf-green": "#a8fd85",
-        black: "#322F1Dff",
+        dirt: "#322F1Dff",
         "sea-leaf": "#0E8388",
         "bright-teal": "#CBE4DE",
         "light-gray": "#D0CFD0ff",

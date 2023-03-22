@@ -16,3 +16,8 @@ export type RegisterResponse = ResponseAPI<{
   userid: string
   email: string
 }>
+
+export type LoginResponse = ResponseAPI<{
+  access_token: string
+  user: User
+}>
