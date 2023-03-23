@@ -26,9 +26,11 @@ export default function App({ Component, pageProps }: AppProps) {
     <QueryClientProvider client={queryClient}>
       <AuthContextProvider>
         <Hydrate state={pageProps.dehydratedState}>
-          <Component {...pageProps} />
+          <ThemeProvider theme={theme}>
+            <Component {...pageProps} />
+          </ThemeProvider>
+          <ReactQueryDevtools initialIsOpen={false} />
         </Hydrate>
-        <ReactQueryDevtools initialIsOpen={false} />
       </AuthContextProvider>
     </QueryClientProvider>
   )
