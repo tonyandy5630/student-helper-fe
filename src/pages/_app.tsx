@@ -3,9 +3,17 @@ import "../styles/global.css"
 import type { AppProps } from "next/app"
 import { AuthContextProvider } from "../context/AuthContext"
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools"
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
-import { ToastContainer } from "react-toastify"
+import { Hydrate, QueryClient, QueryClientProvider } from "@tanstack/react-query"
+import { ThemeProvider, createTheme } from "@mui/material/styles"
+
 export default function App({ Component, pageProps }: AppProps) {
+  const theme = createTheme({
+    typography: {
+      allVariants: {
+        fontFamily: "Monsterrat"
+      }
+    }
+  })
   const queryClient = new QueryClient({
     defaultOptions: {
       queries: {
@@ -17,7 +25,9 @@ export default function App({ Component, pageProps }: AppProps) {
   return (
     <QueryClientProvider client={queryClient}>
       <AuthContextProvider>
-        <Component {...pageProps} />
+        <Hydrate state={pageProps.dehydratedState}>
+          <Component {...pageProps} />
+        </Hydrate>
         <ReactQueryDevtools initialIsOpen={false} />
       </AuthContextProvider>
     </QueryClientProvider>
