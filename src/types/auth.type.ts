@@ -21,3 +21,8 @@ export type LoginResponse = ResponseAPI<{
   access_token: string
   user: User
 }>
+
+export type VerifyEmailType = {
+  email: string
+  token: string
+}

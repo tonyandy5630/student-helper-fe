@@ -10,7 +10,7 @@ export default function App({ Component, pageProps }: AppProps) {
   const theme = createTheme({
     typography: {
       allVariants: {
-        fontFamily: "Monsterrat"
+        fontFamily: "Montserrat, sans-serif"
       }
     }
   })
