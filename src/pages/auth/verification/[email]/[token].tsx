@@ -4,11 +4,12 @@ import { useQuery } from "@tanstack/react-query"
 import { useRouter } from "next/router"
 import { VerifyEmailType } from "types/auth.type"
 import { Container, Stack, Typography } from "@mui/material"
-import Link from "next/link"
-import verifiedTick from "assets/images/green-tick.png"
+import dynamic from "next/dynamic"
+const DynamicImage = dynamic(() => import("components/DynamicImage"), { ssr: false })
+const Link = dynamic(() => import("next/link"))
 import { isAxiosNotAcceptable, isAxiosUnauthorized } from "utils/utils"
-import LoadingCircle from "components/Loading"
-import ErrorMark from "assets/images/red-x.png"
+const LoadingCircle = dynamic(() => import("components/Loading"), { ssr: false })
+
 export default function verificationPage() {
   const router = useRouter()
   const { email, token } = router.query as VerifyEmailType
@@ -47,7 +48,16 @@ export default function verificationPage() {
         return (
           <>
             <Typography>
-              Your token is expired. <Link href='auth/verification/resendToken'>Click here</Link> to resend verify email
+              Your token is expired.
+              <Link
+                href={{
+                  pathname: "/auth/verification/resendToken",
+                  query: { email: email.toString() }
+                }}
+              >
+                Click here
+              </Link>
+              to resend verify email
             </Typography>
           </>
         )
@@ -75,7 +85,7 @@ export default function verificationPage() {
       <Stack alignItems='center' justifyContent='center' className='py-10'>
         {status === "error" && (
           <>
-            <img src={ErrorMark.src} width='200px' height='200px' className='mb-4' />
+            <DynamicImage src='/red-x.png' width={200} height={200} className='mb-4' alt='Failed verified X-Mark red' />
             <Typography variant='h4' textTransform='capitalize' fontWeight='600'>
               Cannot verified
             </Typography>
@@ -83,7 +93,13 @@ export default function verificationPage() {
         )}
         {status === "success" && (
           <>
-            <img src={verifiedTick.src} width='200px' height='200px' className='mb-4' />
+            <DynamicImage
+              src='/green-tick.png'
+              width={200}
+              height={200}
+              className='mb-4'
+              alt='verified success green tick'
+            />
             <Typography variant='h4' textTransform='capitalize' fontWeight='600'>
               Your Email is verified
             </Typography>

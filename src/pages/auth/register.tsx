@@ -1,10 +1,11 @@
 import React, { useRef, useState } from "react"
-import { Grid, Stack, Container, Typography, Divider, NoSsr } from "@mui/material"
+import { Grid, Stack, Container, Typography, Divider } from "@mui/material"
 import { LoadingButton } from "@mui/lab"
-import Logo from "components/Logo"
+import dynamic from "next/dynamic"
+const Logo = dynamic(() => import("components/Logo"))
+import Image from "next/image"
 import FormInput from "components/utils/auth/LoginForm/Input"
 import { useForm } from "react-hook-form"
-import loginPhoto from "../../assets/images/login-2.jpg"
 import { UserSchema, UserSchemaType } from "utils/schema/auth"
 import { yupResolver } from "@hookform/resolvers/yup"
 import { useMutation } from "@tanstack/react-query"
@@ -12,7 +13,7 @@ import { registerAccountAPI } from "apis/auth.api"
 import { omit } from "lodash"
 import { isAxiosUnprocessableEntityError } from "utils/utils"
 import { ResponseAPI } from "types/utils.type"
-import MyCustomModal from "components/utils/auth/LoginForm/Modal"
+const MyCustomModal = dynamic(() => import("components/utils/auth/LoginForm/Modal"), { ssr: false })
 import Link from "next/link"
 import Recaptcha from "react-google-recaptcha"
 import { verifyCaptchaAPI } from "apis/verifyCaptcha.api"
@@ -112,9 +113,7 @@ export default function SignUp() {
 
   return (
     <>
-      <NoSsr>
-        <MyCustomModal visible={visibleCheckMail} setVisible={handleHideModal} email={email} />
-      </NoSsr>
+      <MyCustomModal visible={visibleCheckMail} setVisible={handleHideModal} email={email} />
       <Stack
         component={Container}
         alignItems='center'
@@ -239,7 +238,7 @@ export default function SignUp() {
             justifyContent='flex-end'
             className='hidden w-full h-full lg:flex'
           >
-            <img src={loginPhoto.src} width='450' height='710' className='h-full rounded-r-xl' />
+            <Image src='/login-2.jpg' width='450' height='710' className='h-full rounded-r-xl' alt='Picture of trees' />
           </Grid>
         </Grid>
       </Stack>

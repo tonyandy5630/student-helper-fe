@@ -1,10 +1,11 @@
 import { Stack, Container, Typography, Divider } from "@mui/material"
 import { useForm } from "react-hook-form"
+import dynamic from "next/dynamic"
 import Link from "next/link"
 import React from "react"
 import AuthFormInput from "components/utils/auth/LoginForm/Input"
 import { LoadingButton } from "@mui/lab"
-import LogoComponent from "components/Logo"
+const LogoComponent = dynamic(() => import("components/Logo"))
 import MyGoogleButton from "components/utils/GoogleButton"
 import Footer from "layouts/Footer"
 import { yupResolver } from "@hookform/resolvers/yup"

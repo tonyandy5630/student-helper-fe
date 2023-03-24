@@ -1,5 +1,5 @@
 import React from "react"
-import logo from "assets/images/logo.png"
+import Image from "next/image"
 
 type LogoProps = {
   className?: string
@@ -8,7 +8,7 @@ type LogoProps = {
 export default function LogoComponent({ className }: LogoProps) {
   return (
     <div className={`mx-auto h-32 flex justify-center items-center ${className}`}>
-      <img src={logo.src} className='h-48' />
+      <Image src='/logo.png' width='200' height='200' className='h-48' alt="RESME's logo" />
     </div>
   )
 }
