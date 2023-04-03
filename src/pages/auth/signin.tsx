@@ -10,17 +10,19 @@ import MyGoogleButton from "components/utils/GoogleButton"
 import Footer from "layouts/Footer"
 import { yupResolver } from "@hookform/resolvers/yup"
 import { UserSchema, UserSchemaType } from "utils/schema/auth"
-import * as yup from "yup"
 import { useMutation } from "@tanstack/react-query"
 import { LoginAPI } from "apis/auth.api"
 import { isAxiosUnprocessableEntityError } from "utils/utils"
 import { ResponseAPI } from "types/utils.type"
 import { useRouter } from "next/router"
+import { useCookies } from "react-cookie"
+import { TWO_WEEKS } from "constants/utils"
 
 type FormData = Omit<UserSchemaType, "email" | "rePwd">
 const LoginSchema = UserSchema.omit(["email", "rePwd"])
 export default function SigninPage() {
   const router = useRouter()
+  const [authCookies, setAuthCookies] = useCookies(["access_token_cookie"])
   const {
     handleSubmit,
     control,
@@ -35,8 +37,7 @@ export default function SigninPage() {
   const handleLogin = handleSubmit((data) => {
     loginMutation.mutate(data, {
       onSuccess: (data) => {
-        console.log(data)
-        router.push("/success")
+        router.push("/")
       },
       onError: (err) => {
         if (isAxiosUnprocessableEntityError<ResponseAPI<Omit<FormData, "rePwd" | "email">>>(err)) {

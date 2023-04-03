@@ -43,6 +43,9 @@ module.exports = {
         },
         ".mobile-gray": {
           backgroundColor: "#888484a1"
+        },
+        "text-fill": {
+          "-webkit-text-fill-color": "transparent"
         }
       })
     })

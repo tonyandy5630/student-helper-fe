@@ -12,3 +12,5 @@ export const verifyEmailAPI = (email: string, verifyToken: string) =>
 
 export const resendVerifyEmailAPI = (body: { email: string }) =>
   http.post<ResponseAPI<{}>>("auth/verification/resendToken", body)
+
+export const checkLoginAPI = () => http.get<LoginResponse>("")

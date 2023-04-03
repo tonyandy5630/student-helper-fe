@@ -1,0 +1,27 @@
+.resme {
+  text-transform: uppercase;
+  background: linear-gradient(to right, #30d088 0%, #390867 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.body {
+  overflow-x: hidden;
+}
+
+.fade-in {
+  animation: Fade-in ease 1s;
+  -webkit-animation: Fade-in ease 1s;
+  -moz-animation: Fade-in ease 1s;
+  -o-animation: Fade-in ease 1s;
+  -ms-animation: Fade-in ease 1s;
+}
+
+@keyframes Fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
