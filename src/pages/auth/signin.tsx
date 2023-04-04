@@ -17,6 +17,7 @@ import { ResponseAPI } from "types/utils.type"
 import { useRouter } from "next/router"
 import { useCookies } from "react-cookie"
 import { TWO_WEEKS } from "constants/utils"
+import Head from "next/head"
 
 type FormData = Omit<UserSchemaType, "email" | "rePwd">
 const LoginSchema = UserSchema.omit(["email", "rePwd"])
@@ -70,6 +71,10 @@ export default function SigninPage() {
 
   return (
     <>
+      <Head>
+        <title>RESME Sign In</title>
+        <meta name='description' content='Sign in with us. More people are waiting for you.' />
+      </Head>
       <Stack component={Container} className='h-screen md:w-7/12 lg:w-fit' alignItems='center' justifyContent='center'>
         <form className='flex flex-col items-center justify-around w-9/12 h-5/6 lg:w-10/12' onSubmit={handleLogin}>
           <LogoComponent />

@@ -2,21 +2,19 @@ import Image from "next/image"
 import React from "react"
 import { Stack } from "@mui/material"
 import Link from "next/link"
+import { useScroll, useTransform, motion } from "framer-motion"
 export default function HomePageHeader() {
+  const { scrollYProgress } = useScroll()
+  const y = useTransform(scrollYProgress, [0, 1], ["0px", "320px"])
+  const color = useTransform(scrollYProgress, [0, 1], ["200", "400"])
   return (
     <>
-      <Image
-        src='/banner-top.png'
-        alt='banner image'
-        width={1290}
-        height={250}
-        className='w-screen overflow-hidden h-fit md:max-w-full md:h-full md:relative'
-      />
       <Stack
+        component={motion.div}
         direction='row'
         alignItems='center'
-        justifyContent='space-evenly'
-        className='top-0 right-0 w-64 md:absolute md:py-3'
+        justifyContent='flex-end'
+        className={`fixed right-0 z-10 w-screen`}
       >
         <Link href='/auth/signin' className='p-3 text-black no-underline transition-colors hover:bg-leaf-green'>
           Login

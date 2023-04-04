@@ -18,6 +18,7 @@ import Link from "next/link"
 import Recaptcha from "react-google-recaptcha"
 import { verifyCaptchaAPI } from "apis/verifyCaptcha.api"
 import MyGoogleButton from "components/utils/GoogleButton"
+import Head from "next/head"
 
 type FormData = UserSchemaType
 
@@ -113,6 +114,10 @@ export default function SignUp() {
 
   return (
     <>
+      <Head>
+        <title>RESME Sign up</title>
+        <meta name='description' content="RESME's sign up. Where your deadlines stop suffer" />
+      </Head>
       <MyCustomModal visible={visibleCheckMail} setVisible={handleHideModal} email={email} />
       <Stack
         component={Container}
