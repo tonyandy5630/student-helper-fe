@@ -1,4 +1,4 @@
-import React, { useMemo, useRef, useState } from "react"
+import React, { useEffect, useMemo, useRef, useState } from "react"
 import styles from "styles/homepage.module.css"
 import { useCookies } from "react-cookie"
 import { useQuery } from "@tanstack/react-query"
@@ -19,21 +19,21 @@ export default function NotSignedInHomePage() {
   const y = useTransform(scrollYProgress, [0, 1], ["0", "100px"])
   const [accessCookie, setAccessCookie] = useCookies([ACCESS_TOKEN_COOKIE])
   const [userCookie, setUserCookie] = useCookies([USER_COOKIE])
-  const checkLoginQuery = useQuery(["check-login"], { queryFn: checkLoginAPI })
-  const { data, error, status } = checkLoginQuery
+  // const checkLoginQuery = useQuery(["check-login"], { queryFn: checkLoginAPI, retry: 3 })
+  // const { data, error, status } = checkLoginQuery
 
-  useMemo(() => {
-    if (data) {
-      const access_token = data.data.data?.access_token
-      const user = data.data.data?.user
-      const options = {
-        maxAge: TWO_WEEKS,
-        path: "/"
-      }
-      setAccessCookie(ACCESS_TOKEN_COOKIE, access_token, options)
-      setUserCookie(USER_COOKIE, user, options)
-    }
-  }, [])
+  // useEffect(() => {
+  //   if (data) {
+  //     const access_token = data.data.data?.access_token
+  //     const user = data.data.data?.user
+  //     const options = {
+  //       maxAge: TWO_WEEKS,
+  //       path: "/"
+  //     }
+  //     setAccessCookie(ACCESS_TOKEN_COOKIE, access_token, options)
+  //     setUserCookie(USER_COOKIE, user, options)
+  //   }
+  // }, [data])
 
   return (
     <>
@@ -65,7 +65,7 @@ export default function NotSignedInHomePage() {
             <Stack
               alignItems='flex-start'
               justifyContent='space-evenly'
-              className={`px-2 min-h-3/4 md:items-center md:max-w-full md:px-0 z-10`}
+              className={`px-2 min-h-3/4 items-center md:max-w-full md:px-0 z-10`}
             >
               <Typography
                 component={motion.h1}
@@ -74,7 +74,7 @@ export default function NotSignedInHomePage() {
                 fontWeight='600'
                 initial={{ opacity: 0, letterSpacing: "1px" }}
                 transition={{ duration: 1.5 }}
-                className={`text-7xl md:leading-[6rem] md:text-8xl ${styles["resme"]}`}
+                className={`text-7xl md:leading-[6rem] md:text-8xl text-center break-words ${styles["resme"]}`}
                 gutterBottom
                 animate={{ opacity: 1, letterSpacing: "4px" }}
               >
@@ -100,6 +100,7 @@ export default function NotSignedInHomePage() {
               alt='banner image'
               width={1800}
               height={200}
+              priority
               className='z-10 overflow-hidden md:max-w-screen-2xl'
             />
           </motion.div>
@@ -116,12 +117,16 @@ export default function NotSignedInHomePage() {
             justifyContent='center'
             ref={topRef}
           >
-            <Typography variant='h1' gutterBottom>
+            <Typography
+              variant='h1'
+              gutterBottom
+              className='text-5xl md:leading-[6rem] md:text-8xl text-center break-words'
+            >
               Now available in
             </Typography>
             <Stack component={motion.div} direction='row' alignItems='center'>
               {UNIVERSITIES.map((uni) => (
-                <Image src={uni.src} width={180} height={80} alt={uni.alt} />
+                <Image src={uni.src} key={uni.src} width={180} height={80} alt={uni.alt} />
               ))}
             </Stack>
           </Stack>
