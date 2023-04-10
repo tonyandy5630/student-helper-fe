@@ -1,9 +1,11 @@
-import { SetStateAction, Dispatch } from "react"
+import { SetStateAction, Dispatch, MutableRefObject } from "react"
 import { ResponseAPI } from "./utils.type"
 import { User } from "./user.type"
 export interface IAuthContext {
   user: User
-  setUser: Dispatch<SetStateAction<User>>
+  access_token: string
+  setUser: Dispatch<User>
+  setAccessToken: Dispatch<string>
 }
 
 export type AuthResponse = ResponseAPI<{

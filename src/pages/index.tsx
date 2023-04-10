@@ -11,6 +11,9 @@ import HomePageHeader from "layouts/homepageHeader"
 import { motion, useScroll, useTransform, useInView } from "framer-motion"
 import { UNIVERSITIES } from "constants/utils"
 import Head from "next/head"
+import { useRouter } from "next/router"
+import useGetToken from "hooks/getToken"
+
 export default function NotSignedInHomePage() {
   const { scrollYProgress } = useScroll()
   const opacity = useTransform(scrollYProgress, [0, 1], ["0.8", "0"], { clamp: false })
@@ -19,21 +22,20 @@ export default function NotSignedInHomePage() {
   const y = useTransform(scrollYProgress, [0, 1], ["0", "100px"])
   const [accessCookie, setAccessCookie] = useCookies([ACCESS_TOKEN_COOKIE])
   const [userCookie, setUserCookie] = useCookies([USER_COOKIE])
-  // const checkLoginQuery = useQuery(["check-login"], { queryFn: checkLoginAPI, retry: 3 })
-  // const { data, error, status } = checkLoginQuery
+  const { accessToken, userToken } = useGetToken()
 
-  // useEffect(() => {
-  //   if (data) {
-  //     const access_token = data.data.data?.access_token
-  //     const user = data.data.data?.user
-  //     const options = {
-  //       maxAge: TWO_WEEKS,
-  //       path: "/"
-  //     }
-  //     setAccessCookie(ACCESS_TOKEN_COOKIE, access_token, options)
-  //     setUserCookie(USER_COOKIE, user, options)
-  //   }
-  // }, [data])
+  const isLoggedIn = accessToken !== ""
+
+  useMemo(() => {
+    const options = {
+      maxAge: TWO_WEEKS,
+      path: "/"
+    }
+    if (accessToken && userToken) {
+      setAccessCookie(ACCESS_TOKEN_COOKIE, accessToken, options)
+      setUserCookie(USER_COOKIE, userToken, options)
+    }
+  }, [accessToken, userToken])
 
   return (
     <>
@@ -42,7 +44,7 @@ export default function NotSignedInHomePage() {
         <meta name='description' content="RESME's HomePage. Your study career is just begun" />
       </Head>
       <div className='scroll-smooth'>
-        <HomePageHeader />
+        <HomePageHeader isLoggedIn={isLoggedIn} />
         <Stack
           justifyContent='space-between'
           alignItems='center'
