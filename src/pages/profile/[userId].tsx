@@ -1,8 +1,8 @@
 import { useRouter } from "next/router"
 import React from "react"
-
+import Layout from "layouts"
 export default function ProfilePage() {
   const router = useRouter()
   const { userId } = router.query
-  return <div>{userId}</div>
+  return <Layout>{userId}</Layout>
 }

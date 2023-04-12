@@ -6,3 +6,5 @@ export const UNIVERSITIES = [
     alt: "FPT University's logo"
   }
 ]
+
+export const AVATAR_MENU_ITEMS = ["Profile"]

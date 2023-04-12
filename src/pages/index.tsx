@@ -12,7 +12,7 @@ import { motion, useScroll, useTransform, useInView } from "framer-motion"
 import { UNIVERSITIES } from "constants/utils"
 import Head from "next/head"
 import { useRouter } from "next/router"
-import useGetToken from "hooks/getToken"
+import useGetCookieTokens from "hooks/getCookieTokens"
 
 export default function NotSignedInHomePage() {
   const { scrollYProgress } = useScroll()
@@ -22,7 +22,7 @@ export default function NotSignedInHomePage() {
   const y = useTransform(scrollYProgress, [0, 1], ["0", "100px"])
   const [accessCookie, setAccessCookie] = useCookies([ACCESS_TOKEN_COOKIE])
   const [userCookie, setUserCookie] = useCookies([USER_COOKIE])
-  const { accessToken, userToken } = useGetToken()
+  const { accessToken, userToken } = useGetCookieTokens()
 
   const isLoggedIn = accessToken !== ""
 
@@ -90,6 +90,7 @@ export default function NotSignedInHomePage() {
                 variant='caption'
                 fontSize={16}
                 fontWeight='500'
+                textAlign='center'
                 className={`${styles["resme"]}`}
               >
                 Study is more fun when you have friends
