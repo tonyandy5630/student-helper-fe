@@ -1,11 +1,12 @@
+import { AppBar, Box } from "@mui/material"
 import { ACCESS_TOKEN_COOKIE, USER_COOKIE } from "constants/auth"
 import { AuthContext } from "context/AuthContext"
 import useGetToken from "hooks/getToken"
 import LoggedInHeader from "layouts/LoggedInHeader"
 import { useRouter } from "next/router"
-import React, { useCallback, useContext, useEffect, useState } from "react"
+import React, { useCallback, useContext, useEffect, useMemo, useState } from "react"
 import { useCookies } from "react-cookie"
-import { Button } from "@mui/material"
+import { Slide } from "@mui/material"
 
 export default function SignedInHomePage() {
   const router = useRouter()
@@ -13,6 +14,7 @@ export default function SignedInHomePage() {
   const { accessToken, userToken, queryState } = useGetToken()
   const [accessCookie, setAccessCookie] = useCookies([ACCESS_TOKEN_COOKIE])
   const [userCookie, setUserCookie] = useCookies([USER_COOKIE])
+  const [c, setC] = useState(0)
 
   useEffect(() => {
     if (queryState === "error" && accessToken === "") {
@@ -22,27 +24,35 @@ export default function SignedInHomePage() {
     context.setAccessToken(accessToken)
     setAccessCookie(ACCESS_TOKEN_COOKIE, accessToken)
     setUserCookie(USER_COOKIE, userToken)
-  }, [accessToken, userToken, queryState])
+  }, [accessToken, userToken.username, queryState])
 
-  const viewPage = useCallback(
-    (status: string) => {
-      switch (status) {
-        case "loading":
-          return <>Loading...</>
-        case "error":
-          router.push("/")
-          return <></>
-        case "success":
-          return (
-            <div>
-              <LoggedInHeader accessCookie={accessToken} userCookie={userToken} />
-              <span>{userToken.username}</span>
-            </div>
-          )
-      }
-    },
-    [userToken]
-  )
+  const sendStatus = (status: string) => {
+    switch (status) {
+      case "loading":
+        return <>Loading...</>
+      case "error":
+        router.push("/")
+        return <></>
+      case "success":
+        return (
+          <>
+            <LoggedInHeader accessCookie={accessToken} userCookie={userToken} />
+            <Box
+              height={1200}
+              width={400}
+              bgcolor='red'
+              position='relative'
+              marginBottom={2}
+              onClick={() => setC((prev) => prev + 1)}
+            />
+          </>
+        )
+    }
+  }
 
-  return <>{viewPage(queryState)}</>
+  const viewPage = useMemo(() => {
+    return sendStatus(queryState)
+  }, [queryState])
+
+  return <>{viewPage}</>
 }
