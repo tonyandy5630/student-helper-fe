@@ -1,6 +1,7 @@
 import React, { memo, useState } from "react"
 import { AppBar, Toolbar, Tabs, Stack, Badge } from "@mui/material"
-import NavLink, { NavLinkType } from "./NavLink"
+import NavLink from "./NavLink"
+import type { NavLinkType } from "types/nav.type"
 import NotificationsIcon from "@mui/icons-material/Notifications"
 import SearchIcon from "@mui/icons-material/Search"
 import HomeIcon from "@mui/icons-material/Home"
@@ -26,8 +27,7 @@ function MyNav({ notificationQuantity = 0 }: NavProps) {
   }
 
   const navLinks = LINKS.map(({ label, href }) => {
-    if (href !== "/notification")
-      return <NavLink key={href} href={href} label={label} className={`${href === pathname ? "text-blue-400" : ""}`} />
+    if (href !== "/notification") return <NavLink key={href} href={href} label={label} curPathName={pathname} />
   })
 
   return (
@@ -37,6 +37,7 @@ function MyNav({ notificationQuantity = 0 }: NavProps) {
           {navLinks}
           <NavLink
             href='/notification'
+            curPathName={pathname}
             label={
               <Badge badgeContent={notificationQuantity} invisible={false} color='primary'>
                 <NotificationsIcon fontSize='large' />
