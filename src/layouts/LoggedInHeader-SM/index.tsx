@@ -1,13 +1,9 @@
-import React, { memo, useRef, useState } from "react"
-import { Stack, AppBar, Toolbar, Typography, useScrollTrigger, Slide } from "@mui/material"
+import React, { memo } from "react"
+import { Stack, AppBar, Toolbar, Typography } from "@mui/material"
 import { User } from "types/user.type"
 import MyAvatar from "components/Avatar"
 import HideOnScroll from "components/HideOnScroll"
-
-type IHeaderProps = {
-  accessCookie: string
-  userCookie: User
-}
+import type { IHeaderProps } from "types/headers.type"
 
 const LoggedInHeader = ({ accessCookie, userCookie }: IHeaderProps) => {
   return (

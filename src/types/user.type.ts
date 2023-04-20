@@ -3,4 +3,5 @@ export type User = {
   username: string
   followers: number
   rankInSubjects: Array<Object>
+  hasSupportProfile: boolean
 }

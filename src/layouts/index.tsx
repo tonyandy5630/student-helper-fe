@@ -1,8 +1,12 @@
 import React, { useEffect } from "react"
-import Header from "./LoggedInHeader"
-import MyNav from "./Navigation"
+import dynamic from "next/dynamic"
+const SMHeader = dynamic(() => import("./LoggedInHeader-SM"))
+const MyNav = dynamic(() => import("./Navigation"))
+const LGHeader = dynamic(() => import("./LoggedInHeader-LG"))
 import useGetCookieTokens from "hooks/getCookieTokens"
 import { useRouter } from "next/router"
+import useMediaQuery from "@mui/material/useMediaQuery"
+import { useTheme } from "@mui/material/styles"
 
 type Props = {
   children: React.ReactNode
@@ -11,6 +15,8 @@ type Props = {
 export default function LoggedInLayout({ children }: Props) {
   const { accessToken, userToken, queryState } = useGetCookieTokens()
   const router = useRouter()
+  const theme = useTheme()
+  const isLargeScreen = useMediaQuery(theme.breakpoints.up("lg"))
 
   useEffect(() => {
     if (queryState === "error" && accessToken === "") {
@@ -20,9 +26,13 @@ export default function LoggedInLayout({ children }: Props) {
 
   return (
     <>
-      <Header accessCookie={accessToken} userCookie={userToken} />
+      {isLargeScreen ? (
+        <LGHeader accessCookie={accessToken} userCookie={userToken} />
+      ) : (
+        <SMHeader accessCookie={accessToken} userCookie={userToken} />
+      )}
       {children}
-      <MyNav notificationQuantity={0} />
+      {isLargeScreen ? <></> : <MyNav notificationQuantity={0} />}
     </>
   )
 }

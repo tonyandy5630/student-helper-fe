@@ -1,14 +1,14 @@
-import { AppBar, Box } from "@mui/material"
+import { Box } from "@mui/material"
 import { ACCESS_TOKEN_COOKIE, USER_COOKIE } from "constants/auth"
 import { AuthContext } from "context/AuthContext"
 import useGetCookieTokens from "hooks/getCookieTokens"
-import LoggedInHeader from "layouts/LoggedInHeader"
 import { useRouter } from "next/router"
-import React, { useCallback, useContext, useEffect, useMemo, useState } from "react"
+import React, { useContext, useEffect, useMemo } from "react"
 import { useCookies } from "react-cookie"
-import { Slide } from "@mui/material"
-import Navigation from "layouts/Navigation"
 import Layout from "layouts"
+import { List, Drawer, Toolbar } from "@mui/material"
+import MyDrawer from "layouts/Drawer"
+import MiniDrawer from "layouts/Drawer"
 
 export default function SignedInHomePage() {
   const router = useRouter()
@@ -16,7 +16,6 @@ export default function SignedInHomePage() {
   const { accessToken, userToken, queryState } = useGetCookieTokens()
   const [accessCookie, setAccessCookie] = useCookies([ACCESS_TOKEN_COOKIE])
   const [userCookie, setUserCookie] = useCookies([USER_COOKIE])
-  const [c, setC] = useState(0)
 
   useEffect(() => {
     context.setUser(userToken)
@@ -33,11 +32,7 @@ export default function SignedInHomePage() {
         router.push("/")
         return <></>
       case "success":
-        return (
-          <>
-            <Box height={1200} width={400} bgcolor='red' position='relative' marginBottom={2} />
-          </>
-        )
+        return <>{/* <Box height={1200} width={400} bgcolor='red' position='relative' marginBottom={2} /> */}</>
     }
   }
 
