@@ -8,6 +8,8 @@ import { User } from "types/user.type"
 import { logoutAPI } from "apis/auth.api"
 import { ACCESS_TOKEN_COOKIE, USER_COOKIE } from "constants/auth"
 
+const MIN_W_XS = 40
+const MIN_W_LG = 36
 interface IAvatarProps {
   username: string
   src: string
@@ -42,7 +44,7 @@ export default function MyAvatar({ username, src, className, accessCookie, userC
       path: `/profile/${userCookie.username}`
     },
     {
-      title: "My Class(s)",
+      title: "My Class(es)",
       path: "/my-class"
     }
   ]
@@ -62,7 +64,7 @@ export default function MyAvatar({ username, src, className, accessCookie, userC
   }
 
   const items = MENU_ITEMS.map((item) => (
-    <MenuItem LinkComponent={Link} href={item.path} key={item.path}>
+    <MenuItem sx={{ textTransform: "capitalize" }} LinkComponent={Link} href={item.path} key={item.path}>
       {item.title}
     </MenuItem>
   ))
@@ -75,8 +77,13 @@ export default function MyAvatar({ username, src, className, accessCookie, userC
           aria-controls={openMenu ? "account-menu" : undefined}
           aria-haspopup='true'
           aria-expanded={openMenu ? "true" : undefined}
+          className={`min-w-[${MIN_W_XS}px] min-h-[${MIN_W_XS}px] lg:min-w-[${MIN_W_LG}px] lg:min-h-[${MIN_W_LG}px]`}
         >
-          <Avatar className={`${className}`} src={src} alt={`${username.toUpperCase()}'s avatar`} />
+          <Avatar
+            className={`${className} min-w-[${MIN_W_XS}px] min-h-[${MIN_W_XS}px] lg:min-w-[${MIN_W_LG}px] lg:min-h-[${MIN_W_LG}px]`}
+            src={src}
+            alt={`${username.toUpperCase()}'s avatar`}
+          />
         </IconButton>
       </Tooltip>
 
@@ -84,14 +91,27 @@ export default function MyAvatar({ username, src, className, accessCookie, userC
         open={openMenu}
         anchorEl={anchorEl}
         onClick={handleClose}
+        PaperProps={{
+          sx: {
+            marginTop: 1.5
+          }
+        }}
         id='account-menu'
         onClose={handleClose}
-        transformOrigin={{ horizontal: "left", vertical: "top" }}
-        anchorOrigin={{ horizontal: "left", vertical: "top" }}
+        transformOrigin={{ horizontal: "right", vertical: "top" }}
+        anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
         disableScrollLock={true}
       >
+        {userCookie.hasSupportProfile ? (
+          <></>
+        ) : (
+          <MenuItem sx={{ textTransform: "capitalize" }}>Create support profile</MenuItem>
+        )}
+
         {items}
-        <MenuItem onClick={handleLogOut}>Log out</MenuItem>
+        <MenuItem sx={{ textTransform: "capitalize" }} onClick={handleLogOut}>
+          Log out
+        </MenuItem>
       </Menu>
     </>
   )
