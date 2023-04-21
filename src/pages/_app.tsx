@@ -4,17 +4,9 @@ import type { AppProps } from "next/app"
 import { AuthContextProvider } from "../context/AuthContext"
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools"
 import { Hydrate, QueryClient, QueryClientProvider } from "@tanstack/react-query"
-import { ThemeProvider, createTheme } from "@mui/material/styles"
 import { CookiesProvider } from "react-cookie"
-
+import { ThemeContextProvider } from "context/ThemeContext"
 export default function App({ Component, pageProps }: AppProps) {
-  const theme = createTheme({
-    typography: {
-      allVariants: {
-        fontFamily: "Montserrat, sans-serif"
-      }
-    }
-  })
   const queryClient = new QueryClient({
     defaultOptions: {
       queries: {
@@ -27,11 +19,11 @@ export default function App({ Component, pageProps }: AppProps) {
     <QueryClientProvider client={queryClient}>
       <AuthContextProvider>
         <Hydrate state={pageProps.dehydratedState}>
-          <ThemeProvider theme={theme}>
-            <CookiesProvider>
+          <CookiesProvider>
+            <ThemeContextProvider>
               <Component {...pageProps} />
-            </CookiesProvider>
-          </ThemeProvider>
+            </ThemeContextProvider>
+          </CookiesProvider>
           <ReactQueryDevtools initialIsOpen={false} />
         </Hydrate>
       </AuthContextProvider>

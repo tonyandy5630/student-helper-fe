@@ -79,11 +79,7 @@ export default function MyAvatar({ username, src, className, accessCookie, userC
           aria-expanded={openMenu ? "true" : undefined}
           className={`min-w-[${MIN_W_XS}px] min-h-[${MIN_W_XS}px] lg:min-w-[${MIN_W_LG}px] lg:min-h-[${MIN_W_LG}px]`}
         >
-          <Avatar
-            className={`${className} min-w-[${MIN_W_XS}px] min-h-[${MIN_W_XS}px] lg:min-w-[${MIN_W_LG}px] lg:min-h-[${MIN_W_LG}px]`}
-            src={src}
-            alt={`${username.toUpperCase()}'s avatar`}
-          />
+          <Avatar src={src} alt={`${username.toUpperCase()}'s avatar`} />
         </IconButton>
       </Tooltip>
 

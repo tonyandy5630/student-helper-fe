@@ -7,6 +7,7 @@ import useGetCookieTokens from "hooks/getCookieTokens"
 import { useRouter } from "next/router"
 import useMediaQuery from "@mui/material/useMediaQuery"
 import { useTheme } from "@mui/material/styles"
+import { Container, Stack } from "@mui/material"
 
 type Props = {
   children: React.ReactNode
@@ -31,7 +32,9 @@ export default function LoggedInLayout({ children }: Props) {
       ) : (
         <SMHeader accessCookie={accessToken} userCookie={userToken} />
       )}
-      {children}
+      <Container maxWidth='lg' component={Stack}>
+        {children}
+      </Container>
       {isLargeScreen ? <></> : <MyNav notificationQuantity={0} />}
     </>
   )

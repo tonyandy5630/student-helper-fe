@@ -71,14 +71,14 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== "open" 
 
 type DrawerProps = {
   open: boolean
-  handleDrawerClose?: React.MouseEventHandler<HTMLElement>
+  onToggleDrawer: React.MouseEventHandler<HTMLElement>
 }
 
-function MiniDrawer({ open }: DrawerProps) {
+function MiniDrawer({ open, onToggleDrawer }: DrawerProps) {
   return (
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
-      <Drawer variant='permanent' open={open} className='z-10'>
+      <Drawer variant='permanent' open={open} className='z-10' onClick={onToggleDrawer}>
         <Toolbar />
         <Divider />
         <List>

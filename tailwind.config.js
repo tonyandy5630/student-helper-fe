@@ -15,7 +15,7 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        "leaf-green": "#a8fd85",
+        "leaf-green": "#8CD867",
         dirt: "#322F1Dff",
         "sea-leaf": "#0E8388",
         "bright-teal": "#CBE4DE",

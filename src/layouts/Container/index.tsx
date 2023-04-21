@@ -6,9 +6,5 @@ type Props = {
   className?: string
 }
 export default function MyContainer({ children, className }: Props) {
-  return (
-    <Container className={`min-w-[90%] flex ${className}`}>
-      <>{children}</>
-    </Container>
-  )
+  return <Container className={`min-w-[90%] flex ${className}`}>{children}</Container>
 }

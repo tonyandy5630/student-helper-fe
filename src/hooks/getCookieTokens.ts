@@ -8,7 +8,13 @@ import { useRouter } from "next/router"
 export default function useGetCookieTokens() {
   const accessToken = useRef<string>("")
   const router = useRouter()
-  const userToken = useRef<User>({ email: "", username: "", followers: 0, rankInSubjects: [] })
+  const userToken = useRef<User>({
+    email: "",
+    username: "",
+    followers: 0,
+    rankInSubjects: [],
+    hasSupportProfile: false
+  })
   const queryState = useRef<string>("loading")
   // const queryClient = useQueryClient()
   const checkLoginQuery = useQuery(["check-login"], { queryFn: checkLoginAPI, retry: 1 })
