@@ -1,19 +1,12 @@
 import * as React from "react"
-import { styled, useTheme, Theme, CSSObject } from "@mui/material/styles"
+import { styled, Theme, CSSObject } from "@mui/material/styles"
 import Box from "@mui/material/Box"
 import MuiDrawer from "@mui/material/Drawer"
 import Toolbar from "@mui/material/Toolbar"
 import List from "@mui/material/List"
 import CssBaseline from "@mui/material/CssBaseline"
 import Divider from "@mui/material/Divider"
-import ListItem from "@mui/material/ListItem"
-import ListItemButton from "@mui/material/ListItemButton"
-import ListItemIcon from "@mui/material/ListItemIcon"
-import ListItemText from "@mui/material/ListItemText"
-import InboxIcon from "@mui/icons-material/MoveToInbox"
-import MailIcon from "@mui/icons-material/Mail"
 import StoreIcon from "@mui/icons-material/Store"
-import { Stack } from "@mui/material"
 import PreviewIcon from "@mui/icons-material/Preview"
 import SchoolIcon from "@mui/icons-material/School"
 import FacebookIcon from "@mui/icons-material/Facebook"
@@ -78,7 +71,14 @@ function MiniDrawer({ open, onToggleDrawer }: DrawerProps) {
   return (
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
-      <Drawer variant='permanent' open={open} className='z-10' onClick={onToggleDrawer}>
+      <Drawer
+        variant='permanent'
+        open={open}
+        className='z-10 '
+        // onClick={onToggleDrawer}
+        onMouseOver={onToggleDrawer}
+        onMouseOut={onToggleDrawer}
+      >
         <Toolbar />
         <Divider />
         <List>

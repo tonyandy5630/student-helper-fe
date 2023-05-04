@@ -8,7 +8,6 @@ import SearchIcon from "@mui/icons-material/Search"
 import NotificationButton from "components/Notification"
 import MyClassList from "components/MyClassList"
 import MiniDrawer from "layouts/Drawer"
-import MenuIcon from "@mui/icons-material/Menu"
 import ThemeContext from "context/ThemeContext"
 const ModeNightIcon = dynamic(() => import("@mui/icons-material/ModeNight"))
 const LightModeIcon = dynamic(() => import("@mui/icons-material/LightMode"))
@@ -28,11 +27,11 @@ export default function LoggedInHeaderLarge({ accessCookie, userCookie }: IHeade
         className={` min-h-[56px]  flex flex-row `}
         sx={{ boxShadow: "none", borderBottom: "1px solid rgb(95,95,95)" }}
       >
-        <Stack justifyContent='center' alignContent='center' className='min-w-[30px] h-auto ml-[0.75rem]'>
+        {/* <Stack justifyContent='center' alignContent='center' className='min-w-[30px] h-auto ml-[0.75rem]'>
           <IconButton onClick={handleToggleDrawer} className='h-[40px] w-'>
             <MenuIcon />
           </IconButton>
-        </Stack>
+        </Stack> */}
         <MyContainer>
           <Toolbar className='relative min-w-full'>
             <Stack className='justify-center w-full ' direction='row'>
