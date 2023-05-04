@@ -63,11 +63,11 @@ export default function AuthFormInput({
 
   return (
     <FormControl component={Stack} className='my-2.5 w-full ' required={isRequired}>
-      <InputLabel shrink className='w-full static text-white'>
+      <InputLabel shrink className='static w-full text-white'>
         {label}
       </InputLabel>
       <OutlinedInput
-        className={`bg-white p-2 h-9 rounded-3xl  ${className}`}
+        className={`bg-white text-black p-2 h-9 rounded-3xl  ${className}`}
         id={id}
         {...register(name, registerOptions)}
         autoComplete={autocomplete}

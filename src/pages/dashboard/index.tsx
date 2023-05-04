@@ -1,4 +1,4 @@
-import { Box } from "@mui/material"
+import { Container, Box } from "@mui/material"
 import { ACCESS_TOKEN_COOKIE, USER_COOKIE } from "constants/auth"
 import { AuthContext } from "context/AuthContext"
 import useGetCookieTokens from "hooks/getCookieTokens"
@@ -29,7 +29,11 @@ export default function SignedInHomePage(props: any) {
         router.push("/")
         return <></>
       case "success":
-        return <></>
+        return (
+          <>
+            <Box sx={{ border: "1px solid red", height: "56px" }}>Future majors</Box>
+          </>
+        )
     }
   }
 

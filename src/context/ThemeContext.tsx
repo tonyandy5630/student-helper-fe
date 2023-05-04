@@ -58,6 +58,21 @@ export const ThemeContextProvider = (props: any) => {
             backgroundImage: isDarkMode && "linear - gradient(rgba(255, 255, 255, 0.09), rgba(255, 255, 255, 0.09))"
           } as CSSInterpolation
         }
+      },
+      MuiOutlinedInput: {
+        styleOverrides: {
+          root: {
+            backgroundColor: "#fff",
+            color: "#121212"
+          }
+        }
+      },
+      MuiTypography: {
+        styleOverrides: {
+          root: {
+            color: isDarkMode && "#fff"
+          } as CSSInterpolation
+        }
       }
     }
   })

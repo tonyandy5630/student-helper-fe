@@ -11,7 +11,6 @@ import HomePageHeader from "layouts/homepageHeader"
 import { motion, useScroll, useTransform, useInView } from "framer-motion"
 import { UNIVERSITIES } from "constants/utils"
 import Head from "next/head"
-import { useRouter } from "next/router"
 import useGetCookieTokens from "hooks/getCookieTokens"
 
 export default function NotSignedInHomePage() {

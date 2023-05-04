@@ -20,7 +20,8 @@ module.exports = {
         "sea-leaf": "#0E8388",
         "bright-teal": "#CBE4DE",
         "light-gray": "#D0CFD0ff",
-        "fade-gray": "#C1C5C8ff"
+        "fade-gray": "#C1C5C8ff",
+        black: "#121212"
       },
       width: {
         inherit: "inherit"
