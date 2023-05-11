@@ -11,9 +11,13 @@ export default async function middleware(req: NextRequest) {
     const rawToken = req.cookies.get(ACCESS_TOKEN_COOKIE)?.value as string
     const rawUser = req.cookies.get(USER_COOKIE)?.value as string
     const { pathname } = req.nextUrl
-    console.log(rawToken)
 
     if (pathname === "/") {
+      console.log("hrer")
+      console.log(rawToken)
+      if (rawToken && rawUser) {
+        return NextResponse.redirect(new URL("/dashboard", req.url))
+      }
       return NextResponse.next()
     }
 

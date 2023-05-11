@@ -12,6 +12,7 @@ import { motion, useScroll, useTransform, useInView } from "framer-motion"
 import { UNIVERSITIES } from "constants/utils"
 import Head from "next/head"
 import useGetCookieTokens from "hooks/getCookieTokens"
+import { useRouter } from "next/router"
 
 export default function NotSignedInHomePage() {
   const { scrollYProgress } = useScroll()
@@ -22,7 +23,7 @@ export default function NotSignedInHomePage() {
   const [accessCookie, setAccessCookie] = useCookies([ACCESS_TOKEN_COOKIE])
   const [userCookie, setUserCookie] = useCookies([USER_COOKIE])
   const { accessToken, userToken } = useGetCookieTokens()
-
+  const router = useRouter()
   const isLoggedIn = accessToken !== ""
 
   useMemo(() => {
@@ -33,6 +34,7 @@ export default function NotSignedInHomePage() {
     if (accessToken && userToken) {
       setAccessCookie(ACCESS_TOKEN_COOKIE, accessToken, options)
       setUserCookie(USER_COOKIE, userToken, options)
+      router.push("/dashboard")
     }
   }, [accessToken, userToken])
 
